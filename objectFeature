@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Prototype/__proto__</title>
+</head>
+<body>
+	<script>
+    function b(){
+    	return this.a;
+    }
+    var o={a:'我是对象o的a属性',b:2}
+    var c= b.bind(o);
+    alert(c());//我是对象o的a属性
+    var o1={a:'我是对象o1的a属性',b:b,c:c};
+    alert(o1.b());//我是对象o1的a属性
+    alert(o1.c());//我是对象o的a属性
+    
+	function add(c,d){
+		return this.a+this.b+c+d;
+	}
+	var o={a:1,b:2}
+	alert(add.call(o,3,4));//1+2+3+4=10
+	alert(add.apply(o,[5,6]));//1+2+5+6=14
+
+	function bar(){
+	alert(Object.prototype.toString.call(this));
+	}
+	bar.call(5);//[Object Number];
+
+	alert(5.toString);//Unexpected token ILLEGAL
+
+	function Foo(){
+		this.a=1;
+	}
+	var b=new Foo();
+	alert(b.a);//1
+
+	function Foo1()
+	{
+	   this.a=1;
+	   return {a:2};
+ 	}
+    var c=new Foo1();
+    alert(c.a);//2
+
+	var o={f:function(){return this.a+this.b}};
+	var b=Object.create(o);
+	b.a=1;
+	b.b=2;
+	alert(b.f())//3
+    var o=
+    {
+    	x:1,
+    	f:function(){
+    		return this
+    	},
+    	f1:function(){
+    		return this.x;
+    	}
+    }
+   alert(o.f()===o);//true
+   alert(o.f1()===o.x);//true
+ 
+   var o1=
+   {
+   	x:"对象字面量创建对象，将函数赋值给对象属性，this也仍然指向这个对象。"
+   };
+
+   function f(){
+   	return this.x;
+   }
+   o1.f=f;
+   alert(o1.f());//对象字面量创建对象，将函数赋值给对象属性，this也仍然指向这个对象。
+
+	function  testThis(){
+		"use strict"
+		return this;
+	}
+	alert(testThis()==window);//false
+	alert(testThis());//undefined
+
+    alert(this.document===document);//true
+    var a=1;
+    alert(this.a===window.a);//true
+    alert(window.a);//1
+
+    alert(add(1,2));//3
+    alert(sub);//undefined
+    alert(sub(3,1));//sub is not a function
+    
+    function add(a,b){
+    	return a+b;
+    }
+    var sub=function(a,b){
+    	return a-b;
+    }
+
+	//使用function声明一个构造函数
+	function Foo(){}
+	//创建一个构造函数的实例
+	var a=new Foo();
+
+	
+    //构造函数的constructor属性指向它的构造器，即Function()函数
+	alert(Foo.constructor);//function Function(){[native code]}
+
+	//构造函数的__proto__属性指向它的构造函数的原型对象
+	alert(Foo.__proto__);//function (){}
+     
+    //构造函数的实例是对象
+	alert(typeof a);//object
+	
+	//构造函数的原型是对象
+	alert(typeof Foo.prototype);//object
+
+	//构造函数的实例不是函数没有prototype属性
+	alert(typeof a.prototype);//undefined
+
+	//构造函数的实例是对象，具有__proto__属性，指向该实例的构造函数的原型对象
+	alert(typeof a.__proto__);//object
+
+	//构造函数的实例的隐式原型(__proto__属性所指向的对象)就是构造函数的原型对象
+	alert(a.__proto__===Foo.prototype);//true
+
+
+//var array1=[1,2,3,4,5,6,7,8]
+
+every()迭代函数若每个数组项返回true就返回true
+var everyFunc=array1.every(function(item){
+	return item>0;
+})
+alert(everyFunc);//true
+
+
+//filter()迭代函数返回满足函数条件的数组项目组成的数组;
+var filterFunc=array1.filter(function(item){
+	return item<5;
+})
+alert(filterFunc);//1,2,3,4
+
+
+//map()迭代函数对数组每一项运行给定函数，返回每一项的运行结果组成的数组。
+var mapFunc=array1.map(function(item){
+	return item+1;
+})
+alert(mapFunc);//2,3,4,5,6,7,8,9
+
+
+//some()迭代函数为数组每一项运行给定函数，若有一项返回true则返回true;
+var someFunc=array1.some(function(item){
+	return item>7;
+})
+alert(someFunc);//true
+
+
+forEach()函数为数组每一项运行指定函数，没有返回值。
+var forEachFunc=array1.forEach(function(item){
+	alert(item-1);
+})
+alert(forEachFunc)//undefined
+
+
+</script>
+</body>
+</html>
