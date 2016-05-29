@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-16">
+	<title>Prototype/__proto__</title>
+</head>
+<body>
+<script>
+
+function ClassManager(){};
+ClassManager.prototype.addClass=function(str){
+	document.write('class '+str+' added.  ');
+	return this;
+};
+//链式调用
+var testClass=new ClassManager();
+testClass.addClass("a").addClass("b");//class a added. class b added.
+
+function Person(name){
+	this.name=name;
+}
+function Student(name,className){
+	this.className=className;
+	Person.call(this,name);
+}
+Student.prototype.toString=function(){
+	return 'name: ' + this.name+", className: "+//this.className;
+}
+//继承
+var vicy=new Student("lucy","grade3")
+alert(vicy.toString());//name:lucy  className:grade3
+
+//模拟重载
+function Person(){
+  var arg=arguments;
+  //当传入参数为对象并且不为Null时
+  if(typeof arg[0] === "object"&&arg[0]){
+  	//当传入对象有name属性
+  	if(arg[0].name){
+  		this.name=arg[0].name;
+  	}
+  	if(arg[0].age){
+  		this.age=arg[0].age;
+  	}
+   //当传入参数不为对象时
+  }else{
+  	if(arg[0]){
+  	  this.name=arg[0];
+  	if(arg[1]){
+  	  this.age=arg[1];
+  	  }
+  	}
+  }
+}
+//自定义toString,覆盖继承自Object.prototype的方法
+
+var chris=new Person({name:"evans",age:27})
+alert(chris.name);//evans
+alert(chris.toString());//name:evans,age:27
+
+
+if(!Object.create){
+	Object.create=function(proto){
+       function F(){
+       	F.prototype=proto;
+       	return new F();
+       }
+	}
+}
+
+Object.prototype.test="testing";
+
+function Person(){};
+Person.prototype.work="job";
+
+var bar=new Person();
+alert(bar.test);//testing
+bar.x=1;
+bar.y=2;
+bar.z=3;
+for(var key in bar){
+	document.write(key+" ");//x y z work test
+}
+
+function Student(){};
+//Student.prototype的__proto__为Person.prototype
+Student.prototype=Object.create(Person.prototype);
+//将Student.prototype的x属性设为1
+Student.prototype.x=1;
+var wanke=new Student();
+//实例继承了Student的x属性
+alert(wanke.x);//1
+//将Student.prototype更换为其他对象
+Student.prototype={x:2,y:3};
+//更换对象后不会影响原有实例。
+alert(wanke.x);//1
+alert(wanke.y);//undefined
+//原有实例仍然继承自Student与Person
+alert(wanke.work);//job
+//改变原型后重新创建一个实例
+var tony=new Student();
+//新创建的实例的原型就是更改后的对象。
+alert(tony.x);//2
+alert(tony.y);//3
+alert(tony.work);//undefined
+
+
+function a(){};
+document.write(a.prototype.toString());
+document.write(a.prototype.__proto__);
+
+var a=1;
+var b=2;
+var c=3;
+var obj={x:1,y:2,z:3};
+var key;
+for(key in obj){
+  document.write(key);//xyz
+}
+var newObj=Object.create(obj);
+newObj.a=4;
+for(key in newObj){
+	document.write(key);//axyz
+}
+alert(obj.propertyIsEnumerable("x"));//true
+
+alert('toString' in obj);//true
+alert(obj.propertyIsEnumerable("toString"));//false
+
+
+var descriptor=Object.getOwnPropertyDescriptor(obj,'x');
+//alert(descriptor.configurable)//true
+
+var anotherDescriptor=Object.getOwnPropertyDescriptor(Object,'prototype');
+//alert(anotherDescriptor.configurable);//false
+
+var a=1;
+//用var定义的变量不可删除
+alert(delete a);//false
+
+function del(){
+	var b=2;
+	return delete b;
+}
+alert(del());//false;
+</script>
+</body>
+</html>
