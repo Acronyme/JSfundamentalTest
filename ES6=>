@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ES6 =>函数</title>
+</head>
+<body>
+<script>
+'use strict'
+//多个参数时用括号括起来
+let func0=(a,b)=>a*b
+console.log(func0(2,3));//6
+
+//没有参数时只需要写括号
+//ES6
+let func1=()=>`Hello world`;
+//ES5
+//function func1(){
+//	return 'Hello world';
+//}
+console.log(func1());//Hello world
+
+
+//一个参数时可以不写括号
+//ES6
+let func2=x=>x*x;
+//ES5
+function equal(x){
+	return x*x;
+}
+
+console.log(func2(5));//25
+
+//ES6剩余参数
+let func3=(a,...args)=>args;
+console.log(func3(0,1,2,3,4,5));//[1,2,3,4,5]
+
+//多行语句要用{};
+let func4=(a,...args)=>{
+	console.log(a);
+	console.log(args);
+}
+
+//箭头函数内部没有constructor与prototype属性，不能被new
+//let a=new func4();
+
+var x = 1,
+    obj= {
+        x : 10,
+        test : () => this.x
+    };
+
+console.log(obj.test()); // 1
+console.log(obj.test.call(obj)); // 还是1
+
+</script>
+</body>
+</html>
