@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+
+	<title>ES6</title>
+</head>
+<body>
+<script>
+'use strict'
+const bar = function baz() {};
+console.log(
+// ES5
+bar.name, // "baz"
+
+// ES6
+bar.name,// "baz"
+
+(new Function).name, // "anonymous"
+
+function foo() {};
+foo.bind({}).name // "bound foo"
+
+(function(){}).bind({}).name // "bound "
+
+)
+</script>
+</body>
+</html>
