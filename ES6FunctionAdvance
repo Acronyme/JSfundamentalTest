@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+
+	<title>ES6functiondvance</title>
+</head>
+<body>
+<script>
+'use strict'
+
+foo::bar;
+// 等同于
+bar.bind(foo);
+
+foo::bar(...arguments);
+// 等同于
+bar.apply(foo, arguments);
+
+const hasOwnProperty = Object.prototype.hasOwnProperty;
+function hasOwn(obj, key) {
+  return obj::hasOwnProperty(key);
+}
+
+var method = obj::obj.foo;
+// 等同于
+var method = ::obj.foo;
+
+let log = ::console.log;
+// 等同于
+var log = console.log.bind(console);
+
+
+import { map, takeWhile, forEach } from "iterlib";
+
+getPlayers()
+::map(x => x.character())
+::takeWhile(x => x.strength > 100)
+::forEach(x => console.log(x));
+
+// 例二
+let { find, html } = jake;
+
+document.querySelectorAll("div.myClass")
+::find("p")
+::html("hahaha");
+
+//不属于尾调用的情况
+// 情况一
+function f(x){
+  let y = g(x);
+  return y;
+}
+
+// 情况二
+function f(x){
+  return g(x) + 1;
+}
+
+// 情况三
+function f(x){
+  g(x);
+}
+//情况三相当于
+function f(x){
+  g(x);
+  return undefined;
+}
+
+//函数m()和n()都属于尾调用
+function f(x) {
+  if (x > 0) {
+    return m(x)
+  }
+  return n(x);
+}
+
+//尾调用优化
+function f() {
+  let m = 1;
+  let n = 2;
+  return g(m + n);
+}
+f();
+
+// 等同于
+function f() {
+  return g(3);
+}
+f();
+
+// 等同于
+g(3);
+
+//无法进行尾调用优化，因为内层函数用到了外层函数的局部变量
+function addOne(a){
+  var one = 1;
+  function inner(b){
+    return b + one;
+  }
+  return inner(a);
+}
+
+//非尾递归，复杂度O(n)
+function factorial(n) {
+  if (n === 1) return 1;
+  return n * factorial(n - 1);
+}
+
+factorial(5) // 120
+
+//尾递归，复杂度O(1)
+function factorial(n, total) {
+  if (n === 1) return total;
+  return factorial(n - 1, n * total);
+}
+
+factorial(5, 1) // 120
+
+//非尾递归斐波那契
+function Fibonacci (n) {
+  if ( n <= 1 ) {return 1};
+
+  return Fibonacci(n - 1) + Fibonacci(n - 2);
+}
+
+Fibonacci(10); // 89
+// Fibonacci(100)
+// Fibonacci(500)
+// 堆栈溢出了
+
+//尾递归优化过的fibonacci 递归算法
+function Fibonacci2 (n , ac1 = 1 , ac2 = 1) {
+  if( n <= 1 ) {return ac2};
+
+  return Fibonacci2 (n - 1, ac2, ac1 + ac2);
+}
+
+Fibonacci2(100) // 573147844013817200000
+Fibonacci2(1000) // 7.0330367711422765e+208
+Fibonacci2(10000) // Infinity
+
+</script>
+</body>
+</html>
