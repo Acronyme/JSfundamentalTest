@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>OOJavaScript</title>
+</head>
+<body>
+<script>
+'use strict'
+
+var foo = 'bar';
+var baz = {foo};
+baz // {foo: "bar"}
+
+// 等同于
+var baz = {foo: bar};
+
+function f(x, y) {
+  return {x, y};
+}
+
+// 等同于
+
+function f(x, y) {
+  return {x: x, y: y};
+}
+
+f(1, 2) // Object {x: 1, y: 2}
+
+//方法的简写
+var o = {
+  method() {
+    return "Hello!";
+  }
+};
+
+// 等同于
+
+var o = {
+  method: function() {
+    return "Hello!";
+  }
+};
+//例
+var birth = '2000/01/01';
+
+var Person = {
+
+  name: '张三',
+
+  //等同于birth: birth
+  birth,
+
+  // 等同于hello: function ()...
+  hello() { console.log('我的名字是', this.name); }
+
+};
+
+function getPoint() {
+  var x = 1;
+  var y = 10;
+  return {x, y};
+}
+
+getPoint()
+// {x:1, y:10}
+
+var obj = {
+  class () {}
+};
+
+// 等同于
+
+var obj = {
+  'class': function() {}
+};
+
+var obj = {
+  * m(){
+    yield 'hello world';
+  }
+};
+
+//属性表示方法
+
+// 方法一
+obj.foo = true;
+
+// 方法二
+obj['a' + 'bc'] = 123;
+
+//ES5只能用标识符定义属性
+var obj = {
+  foo: true,
+  abc: 123
+};
+
+//ES6允许对象字面量表达式属性
+let propKey = 'foo';
+
+let obj = {
+  [propKey]: true,
+  ['a' + 'bc']: 123
+};
+
+//例
+var lastWord = 'last word';
+
+var a = {
+  'first word': 'hello',
+  [lastWord]: 'world'
+};
+
+a['first word'] // "hello"
+a[lastWord] // "world"
+a['last word'] // "world"
+
+//表达式定义方法名
+let obj = {
+  ['h'+'ello']() {
+    return 'hi';
+  }
+};
+
+obj.hello() // hi
+
+//属性名表达式与简洁表示法不能同时使用，否则报错
+// 报错
+var foo = 'bar';
+var bar = 'abc';
+var baz = { [foo] };
+
+// 正确
+var foo = 'bar';
+var baz = { [foo]: 'abc'};
+
+//方法的name属性
+var person = {
+  sayName() {
+    console.log(this.name);
+  },
+  get firstName() {
+    return "Nicholas";
+  }
+};
+person.sayName.name   // "sayName"
+person.firstName.name // "get firstName"
+
+
+(new Function()).name // "anonymous"
+
+var doSomething = function() {
+  // ...
+};
+doSomething.bind().name // "bound doSomething"
+
+
+const key1 = Symbol('description');
+const key2 = Symbol();
+let obj = {
+  [key1]() {},
+  [key2]() {},
+};
+obj[key1].name // "[description]"
+obj[key2].name // ""
+
+//上面代码中，key1对应的Symbol值有描述，key2没有。
+</script>
+</body>
+</html>
