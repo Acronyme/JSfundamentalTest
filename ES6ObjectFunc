@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ES6 Advanced Object</title>
+</head>
+<body>
+<script>
+'use strict'
+
+//Object.is()
+Object.is('foo', 'foo')
+// true
+Object.is({}, {})
+// false
+
++0 === -0 //true
+NaN === NaN // false
+
+Object.is(+0, -0) // false
+Object.is(NaN, NaN) // true
+
+//Object.assign()
+var target = { a: 1 };
+
+var source1 = { b: 2 };
+var source2 = { c: 3 };
+
+Object.assign(target, source1, source2);
+target // {a:1, b:2, c:3}
+
+//后边的属性会覆盖前边的同名属性
+var target = { a: 1, b: 1 };
+
+var source1 = { b: 2, c: 2 };
+var source2 = { c: 3 };
+
+Object.assign(target, source1, source2);
+target // {a:1, b:2, c:3}
+
+//只有一个参数时直接返回该对象
+var obj = {a: 1};
+Object.assign(obj) === obj // true
+
+//不是对象先转换为对象再返回
+typeof Object.assign(2) // "object"
+
+//undefined和null作为参数会报错
+Object.assign(undefined) // 报错
+Object.assign(null) // 报错
+
+//源对象会转为对象，无法转换则跳过
+let obj = {a: 1};
+Object.assign(obj, undefined) === obj // true
+Object.assign(obj, null) === obj // true
+
+//字符串会以数组形式进入对象，布尔值与数值无效果
+var v1 = 'abc';
+var v2 = true;
+var v3 = 10;
+
+var obj = Object.assign({}, v1, v2, v3);
+console.log(obj); // { "0": "a", "1": "b", "2": "c" }
+
+//不可枚举属性不会被拷贝
+Object.assign({b: 'c'},
+  Object.defineProperty({}, 'invisible', {
+    enumerable: false,
+    value: 'hello'
+  })
+)
+// { b: 'c' }
+
+//属性名为Symbol值的属性，也会被Object.assign拷贝。
+
+Object.assign({ a: 'b' }, { [Symbol('c')]: 'd' })
+// { a: 'b', Symbol(c): 'd' }
+
+
+
+//拷贝的是属性对象的引用
+var obj1 = {a: {b: 1}};
+var obj2 = Object.assign({}, obj1);
+
+obj1.a.b = 2;
+obj2.a.b // 2
+
+
+</script>
+</body>
+</html>
