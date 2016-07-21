@@ -2,169 +2,101 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>ES6AdvancedObj</title>
+	<title>ES6 Advanced Object</title>
 </head>
 <body>
 <script>
 'use strict'
 
-var foo = 'bar';
-var baz = {foo};
-baz // {foo: "bar"}
+//Object.is()
+Object.is('foo', 'foo')
+// true
+Object.is({}, {})
+// false
 
-// 等同于
-var baz = {foo: bar};
++0 === -0 //true
+NaN === NaN // false
 
-function f(x, y) {
-  return {x, y};
-}
+Object.is(+0, -0) // false
+Object.is(NaN, NaN) // true
 
-// 等同于
+//Object.assign()
+var target = { a: 1 };
 
-function f(x, y) {
-  return {x: x, y: y};
-}
+var source1 = { b: 2 };
+var source2 = { c: 3 };
 
-f(1, 2) // Object {x: 1, y: 2}
+Object.assign(target, source1, source2);
+target // {a:1, b:2, c:3}
 
-//方法的简写
-var o = {
-  method() {
-    return "Hello!";
-  }
-};
+//后边的属性会覆盖前边的同名属性
+var target = { a: 1, b: 1 };
 
-// 等同于
+var source1 = { b: 2, c: 2 };
+var source2 = { c: 3 };
 
-var o = {
-  method: function() {
-    return "Hello!";
-  }
-};
-//例
-var birth = '2000/01/01';
+Object.assign(target, source1, source2);
+target // {a:1, b:2, c:3}
 
-var Person = {
+//只有一个参数时直接返回该对象
+var obj = {a: 1};
+Object.assign(obj) === obj // true
 
-  name: '张三',
+//不是对象先转换为对象再返回
+typeof Object.assign(2) // "object"
 
-  //等同于birth: birth
-  birth,
+//undefined和null作为参数会报错
+Object.assign(undefined) // 报错
+Object.assign(null) // 报错
 
-  // 等同于hello: function ()...
-  hello() { console.log('我的名字是', this.name); }
+//源对象会转为对象，无法转换则跳过
+let obj = {a: 1};
+Object.assign(obj, undefined) === obj // true
+Object.assign(obj, null) === obj // true
 
-};
+//字符串会以数组形式进入对象，布尔值与数值无效果
+var v1 = 'abc';
+var v2 = true;
+var v3 = 10;
 
-function getPoint() {
-  var x = 1;
-  var y = 10;
-  return {x, y};
-}
+var obj = Object.assign({}, v1, v2, v3);
+console.log(obj); // { "0": "a", "1": "b", "2": "c" }
 
-getPoint()
-// {x:1, y:10}
+//不可枚举属性不会被拷贝
+Object.assign({b: 'c'},
+  Object.defineProperty({}, 'invisible', {
+    enumerable: false,
+    value: 'hello'
+  })
+)
+// { b: 'c' }
 
-var obj = {
-  class () {}
-};
+//属性名为Symbol值的属性，也会被Object.assign拷贝。
 
-// 等同于
-
-var obj = {
-  'class': function() {}
-};
-
-var obj = {
-  * m(){
-    yield 'hello world';
-  }
-};
-
-//属性表示方法
-
-// 方法一
-obj.foo = true;
-
-// 方法二
-obj['a' + 'bc'] = 123;
-
-//ES5只能用标识符定义属性
-var obj = {
-  foo: true,
-  abc: 123
-};
-
-//ES6允许对象字面量表达式属性
-let propKey = 'foo';
-
-let obj = {
-  [propKey]: true,
-  ['a' + 'bc']: 123
-};
-
-//例
-var lastWord = 'last word';
-
-var a = {
-  'first word': 'hello',
-  [lastWord]: 'world'
-};
-
-a['first word'] // "hello"
-a[lastWord] // "world"
-a['last word'] // "world"
-
-//表达式定义方法名
-let obj = {
-  ['h'+'ello']() {
-    return 'hi';
-  }
-};
-
-obj.hello() // hi
-
-//属性名表达式与简洁表示法不能同时使用，否则报错
-// 报错
-var foo = 'bar';
-var bar = 'abc';
-var baz = { [foo] };
-
-// 正确
-var foo = 'bar';
-var baz = { [foo]: 'abc'};
-
-//方法的name属性
-var person = {
-  sayName() {
-    console.log(this.name);
-  },
-  get firstName() {
-    return "Nicholas";
-  }
-};
-person.sayName.name   // "sayName"
-person.firstName.name // "get firstName"
+Object.assign({ a: 'b' }, { [Symbol('c')]: 'd' })
+// { a: 'b', Symbol(c): 'd' }
 
 
-(new Function()).name // "anonymous"
 
-var doSomething = function() {
-  // ...
-};
-doSomething.bind().name // "bound doSomething"
+//拷贝的是属性对象的引用
+var obj1 = {a: {b: 1}};
+var obj2 = Object.assign({}, obj1);
+
+obj1.a.b = 2;
+obj2.a.b // 2
 
 
-const key1 = Symbol('description');
-const key2 = Symbol();
-let obj = {
-  [key1]() {},
-  [key2]() {},
-};
-obj[key1].name // "[description]"
-obj[key2].name // ""
+//嵌套对象不会添加属性，而会替换
+var target = { a: { b: 'c', d: 'e' } }
+var source = { a: { b: 'hello' } }
+Object.assign(target, source)
+// { a: { b: 'hello' } }
 
-//上面代码中，key1对应的Symbol值有描述，key2没有。
+
+//将数组视为对象
+Object.assign([1, 2, 3], [4, 5])
+// [4, 5, 3]
+
 </script>
 </body>
 </html>
