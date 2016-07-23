@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ES6 Advanced Object</title>
+</head>
+<body>
+<script>
+'use strict'
+
+let obj = { foo: 123 };
+Object.getOwnPropertyDescriptor(obj, 'foo')
+//  {
+//    value: 123,
+//    writable: true,
+//    enumerable: true,
+//    configurable: true
+//  }
+
+//该方法继承属性不会被枚举
+Object.getOwnPropertyDescriptor(Object.prototype, 'toString').enumerable
+// false
+
+Object.getOwnPropertyDescriptor([], 'length').enumerable
+// false
+
+Object.getOwnPropertyDescriptor(class {foo() {}}.prototype, 'foo').enumerable
+// false
+
+
+Reflect.ownKeys({ [Symbol()]:0, b:0, 10:0, 2:0, a:0 })
+// ['2', '10', 'b', 'a', Symbol()]
+
+//__proto__
+
+// es6的写法
+var obj = {
+  method: function() { ... }
+};
+obj.__proto__ = someOtherObj;
+
+// es5的写法
+var obj = Object.create(someOtherObj);
+obj.method = function() { ... };
+
+
+//如果一个对象本身部署了__proto__属性，则该属性的值就是对象的原型。
+Object.getPrototypeOf({ __proto__: null })
+// null
+
+//setPrototypeOf()
+// 格式
+Object.setPrototypeOf(object, prototype)
+
+// 用法
+var o = Object.setPrototypeOf({}, null);
+
+//等价于
+function (obj, proto) {
+  obj.__proto__ = proto;
+  return obj;
+}
+
+let proto = {};
+let obj = { x: 10 };
+Object.setPrototypeOf(obj, proto);
+
+proto.y = 20;
+proto.z = 40;
+
+obj.x // 10
+obj.y // 20
+obj.z // 40
+
+function Rectangle() {
+}
+
+var rec = new Rectangle();
+
+Object.getPrototypeOf(rec) === Rectangle.prototype
+// true
+
+Object.setPrototypeOf(rec, Object.prototype);
+Object.getPrototypeOf(rec) === Rectangle.prototype
+// false
+
+</script>
+</body>
+</html>
