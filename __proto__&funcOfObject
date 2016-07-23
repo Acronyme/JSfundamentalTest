@@ -84,6 +84,61 @@ Object.setPrototypeOf(rec, Object.prototype);
 Object.getPrototypeOf(rec) === Rectangle.prototype
 // false
 
+//Object.keys()
+var obj = { foo: "bar", baz: 42 };
+Object.keys(obj)
+// ["foo", "baz"]
+
+
+let {keys, values, entries} = Object;
+let obj = { a: 1, b: 2, c: 3 };
+
+for (let key of keys(obj)) {
+  console.log(key); // 'a', 'b', 'c'
+}
+
+for (let value of values(obj)) {
+  console.log(value); // 1, 2, 3
+}
+
+for (let [key, value] of entries(obj)) {
+  console.log([key, value]); // ['a', 1], ['b', 2], ['c', 3]
+}
+
+
+//Object.values()
+var obj = { foo: "bar", baz: 42 };
+Object.values(obj)
+// ["bar", 42]
+
+var obj = { 100: 'a', 2: 'b', 7: 'c' };
+Object.values(obj)
+// ["b", "c", "a"]
+
+
+//对字符串返回字符数组
+Object.values('foo')
+// ['f', 'o', 'o']
+
+
+//对数值和布尔值返回空数组
+Object.values(42) // []
+Object.values(true) // []
+
+
+//Object.entries()
+var obj = { foo: 'bar', baz: 42 };
+Object.entries(obj)
+// [ ["foo", "bar"], ["baz", 42] ]
+
+//忽略Symbol值
+Object.entries({ [Symbol()]: 123, foo: 'abc' });
+// [ [ 'foo', 'abc' ] ]
+
+var obj = { foo: 'bar', baz: 42 };
+var map = new Map(Object.entries(obj));
+map // Map { foo: "bar", baz: 42 }
+
 </script>
 </body>
 </html>
