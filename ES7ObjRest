@@ -46,7 +46,39 @@ x // 1
 y // undefined
 z // 3
 
+//...扩展运算符
 
+let z = { a: 3, b: 4 };
+let n = { ...z };
+n // { a: 3, b: 4 }
+
+//等价于
+let aClone = { ...a };
+// 等同于
+let aClone = Object.assign({}, a);
+
+let ab = { ...a, ...b };
+// 等同于
+let ab = Object.assign({}, a, b);
+
+//对象属性会被自定义属性覆盖
+let aWithOverrides = { ...a, x: 1, y: 2 };
+// 等同于
+let aWithOverrides = { ...a, ...{ x: 1, y: 2 } };
+// 等同于
+let x = 1, y = 2, aWithOverrides = { ...a, x, y };
+// 等同于
+let aWithOverrides = Object.assign({}, a, { x: 1, y: 2 });
+
+//自定义属性在对象之前等于设置属性默认值
+let aWithDefaults = { x: 1, y: 2, ...a };
+// 等同于
+let aWithDefaults = Object.assign({}, { x: 1, y: 2 }, a);
+// 等同于
+let aWithDefaults = Object.assign({ x: 1, y: 2 }, a);
+
+
+let emptyObject = { ...null, ...undefined }; // 不报错
 
 </script>
 </body>
