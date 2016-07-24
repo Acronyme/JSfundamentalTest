@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ES6 Advanced Object</title>
+</head>
+<body>
+<script>
+'use strict'
+//ES7对象解构赋值
+let { x, y, ...z } = { x: 1, y: 2, a: 3, b: 4 };
+
+x, // 1
+y,// 2
+z // { a: 3, b: 4 }
+
+//等号右边必须是对象
+let { x, y, ...z } = null; // 运行时错误
+let { x, y, ...z } = undefined; // 运行时错误
+
+
+//rest必须是最后一个参数
+let { ...x, y, z } = obj; // 句法错误
+let { x, ...y, ...z } = obj; // 句法错误
+
+
+//拷贝复合类型值的引用
+let obj = { a: { b: 1 } };
+let { ...x } = obj;
+obj.a.b = 2;
+x.a.b // 2
+
+//Rest参数不拷贝继承自原型对象的属性
+let o1 = { a: 1 };
+let o2 = { b: 2 };
+o2.__proto__ = o1;
+let o3 = { ...o2 };
+o3 // { b: 2 }
+
+//单纯的解构赋值可以读取继承属性
+var o = Object.create({ x: 1, y: 2 });
+o.z = 3;
+
+let { x, ...{ y, z } } = o;
+x // 1
+y // undefined
+z // 3
+
+
+
+</script>
+</body>
+</html>
